@@ -1,6 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = ({ user, onLogout }) => {
+const Navbar = ({ user, setUser }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear user (auth state or JWT cookie)
+    setUser(null); 
+    // Optionally clear JWT cookie/localStorage
+    localStorage.removeItem('token'); 
+    navigate('/'); // Go to Home
+  };
+
   return (
     <nav className="navbar">
       <div className="logo"><h2>GarmentsFlow</h2></div>
@@ -15,8 +25,15 @@ const Navbar = ({ user, onLogout }) => {
           </>
         ) : (
           <>
+            <li style={{ fontWeight: 'bold', color: '#f85f73' }}>
+              Hello, {user.name}!
+            </li>
             <li><Link to="/dashboard">Dashboard</Link></li>
-            <li><button onClick={onLogout} className="btn-logout">Logout</button></li>
+            <li>
+              <button onClick={handleLogout} className="btn-logout">
+                Logout
+              </button>
+            </li>
           </>
         )}
       </ul>

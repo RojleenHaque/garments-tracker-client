@@ -1,13 +1,17 @@
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import { useNavigate, Link } from 'react-router-dom';
 
-
-const Login = () => {
+const Login = ({ setUser }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    console.log(data);
+    // Simulate login success (replace with actual API call)
+    const user = { name: "Rojleen", email: data.email, role: "buyer" };
+    setUser(user); // Update App state
     Swal.fire('Success', 'Logged in successfully', 'success');
+    navigate('/'); // Redirect to Home
   };
 
   return (
@@ -28,6 +32,9 @@ const Login = () => {
 
         <button type="submit" className="btn-primary">Login</button>
       </form>
+      <p>
+        Don't have an account? <Link to="/register">Register here</Link>
+      </p>
     </div>
   );
 };

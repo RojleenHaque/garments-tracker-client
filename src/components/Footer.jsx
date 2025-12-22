@@ -1,9 +1,16 @@
 const Footer = () => (
   <footer className="footer">
-    <h3>Garments Order & Production Tracker</h3>
-    <p>Empowering small and medium factories with real-time workflow management.</p>
-    <div className="footer-links">
-      <p>&copy; 2024 GarmentsFlow System. All rights reserved.</p>
+    <div className="footer-top">
+      <h2>GarmentsFlow</h2>
+      <p>Streamlining garment production & orders with real-time tracking.</p>
+    </div>
+    <div className="footer-bottom">
+      <p>&copy; 2024 GarmentsFlow. All rights reserved.</p>
+      <div className="social-icons">
+        <a href="#" aria-label="Facebook">🌐</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="Instagram">📸</a>
+      </div>
     </div>
   </footer>
 );

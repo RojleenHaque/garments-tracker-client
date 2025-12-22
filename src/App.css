@@ -18,7 +18,53 @@ body { font-family: 'Inter', sans-serif; background: var(--bg-light); color: var
 .nav-links { display: flex; gap: 2rem; list-style: none; }
 .nav-links a { text-decoration: none; color: var(--primary); font-weight: 600; }
 
-.footer { background: var(--primary); color: var(--white); padding: 3rem 5%; margin-top: 4rem; text-align: center; }
+/* footer */
+.footer {
+  background: linear-gradient(135deg, #f85f73, #ffb347);
+  color: #fff;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-top h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.footer-top p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #ffe;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-bottom p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.footer-bottom .social-icons a {
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+  color: #fff;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.footer-bottom .social-icons a:hover {
+  transform: scale(1.2);
+  color: #ffd700;
+}
+
 
 
 /* Product Grid */

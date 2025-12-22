@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit } = useForm(); // removed 'errors' since it was unused
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {

@@ -1,17 +1,21 @@
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const Login = ({ setUser }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/'; // Redirect destination after login
 
   const onSubmit = (data) => {
     // Simulate login success (replace with actual API call)
-    const user = { name: "Rojleen", email: data.email, role: "buyer" };
+    const user = { name: "Rojleen", email: data.email, role: "buyer", status: "active" };
     setUser(user); // Update App state
     Swal.fire('Success', 'Logged in successfully', 'success');
-    navigate('/'); // Redirect to Home
+
+    // Redirect to the original page or home
+    navigate(from, { replace: true });
   };
 
   return (
@@ -32,11 +36,12 @@ const Login = ({ setUser }) => {
 
         <button type="submit" className="btn-primary">Login</button>
       </form>
-      <p>
-        Don't have an account? <Link to="/register">Register here</Link>
+      <p className="mt-4">
+        Don't have an account? <Link to="/register" className="text-orange-600 hover:text-orange-800 font-semibold">Register here</Link>
       </p>
     </div>
   );
 };
 
 export default Login;
+

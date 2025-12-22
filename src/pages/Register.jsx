@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
+
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
-    // Check password: 1 Upper, 1 Lower, 6+ length [cite: 76, 77]
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     if (!passwordRegex.test(data.password)) {
       Swal.fire('Error', 'Password must have 1 Uppercase, 1 Lowercase, and 6+ characters', 'error');
@@ -17,23 +17,27 @@ const Register = () => {
 
   return (
     <div className="auth-container">
-      <h2>Join GarmentsFlow</h2>
+      <h2>Create Account</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <label>Name</label>
-          <input {...register("name", { required: true })} className="form-control" />
+          <input {...register("name", { required: true })} placeholder="John Doe" />
+          {errors.name && <span className="error">Name is required</span>}
         </div>
+
         <div className="form-group">
           <label>Role</label>
-          <select {...register("role")} className="form-control">
+          <select {...register("role")}>
             <option value="buyer">Buyer</option>
             <option value="manager">Manager</option>
           </select>
         </div>
+
         <div className="form-group">
           <label>Password</label>
-          <input type="password" {...register("password")} className="form-control" />
+          <input type="password" {...register("password")} placeholder="Enter strong password" />
         </div>
+
         <button type="submit" className="btn-primary">Register</button>
       </form>
     </div>

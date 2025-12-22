@@ -20,13 +20,6 @@ body { font-family: 'Inter', sans-serif; background: var(--bg-light); color: var
 
 .footer { background: var(--primary); color: var(--white); padding: 3rem 5%; margin-top: 4rem; text-align: center; }
 
-/* Forms (Login/Register) */
-.auth-container { max-width: 450px; margin: 4rem auto; padding: 2rem; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); }
-.form-group { margin-bottom: 1.5rem; }
-.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-.form-control { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
-.btn-primary { width: 100%; padding: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-.btn-primary:hover { background: var(--accent); }
 
 /* Product Grid */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; padding: 2rem 5%; }
@@ -59,3 +52,245 @@ td { padding: 1rem; border-top: 1px solid #e2e8f0; }
 
 .btn-approve { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
 .btn-reject { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-left: 5px; }
+
+
+/* home */
+.home-container {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.hero {
+  background: linear-gradient(135deg, #f8b500, #f85f73);
+  padding: 100px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.cta-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #555;
+}
+
+.our-products {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.our-products h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* register */
+.auth-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+.auth-container h2 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: #f85f73;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #f83c5b;
+}
+
+.error {
+  color: red;
+  font-size: 0.85rem;
+}
+
+
+/* products */
+.page-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.page-container h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-body h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background-color: #f85f73;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #f83c5b;
+}
+
+/* product detail */
+.details-container {
+  max-width: 1000px;
+  margin: 60px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 0 20px;
+}
+
+.details-image {
+  flex: 1 1 400px;
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 500px;
+}
+
+.details-info {
+  flex: 1 1 400px;
+}
+
+.details-info h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.details-info p {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* not found */
+.notfound-container {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.notfound-container h1 {
+  font-size: 6rem;
+  color: #f85f73;
+  margin-bottom: 20px;
+}
+
+.notfound-container p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.notfound-container .btn-primary {
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #333;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.notfound-container .btn-primary:hover {
+  background-color: #555;
+}

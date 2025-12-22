@@ -1,20 +1,34 @@
-// src/pages/Home.jsx
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.div 
+      className="home-container"
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }}
+    >
       <section className="hero">
-        <h1>Efficient Garment Production Tracking</h1>
-        <button className="cta-btn">View Products</button> {/* [cite: 50] */}
+        <div className="hero-content">
+          <h1>Efficient Garment Production Tracking</h1>
+          <p>Streamline your workflow and monitor garment production in real-time.</p>
+          <button className="cta-btn" onClick={() => navigate('/products')}>
+            View Products
+          </button>
+        </div>
       </section>
       
       <section className="our-products">
-        <h2>Our Products</h2>
+        <h2>Our Featured Products</h2>
         <div className="product-grid">
-          {/* Map products here (Limit 6) [cite: 51] */}
+          {/* Map top 6 products here */}
         </div>
       </section>
     </motion.div>
   );
 };
+
+export default Home;

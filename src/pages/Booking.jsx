@@ -27,7 +27,7 @@ const Booking = ({ user }) => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        'http://localhost:5000/book-product',
+        'https://garments-tracker-server-1.onrender.com/book-product',
         { ...data, quantity: Number(data.quantity), productId: id },
         { withCredentials: true }
       );

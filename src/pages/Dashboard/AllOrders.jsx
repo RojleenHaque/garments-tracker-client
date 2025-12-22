@@ -7,7 +7,7 @@ const AllOrders = () => {
   const [filter, setFilter] = useState(""); // Pending / Approved / Rejected
 
   useEffect(() => {
-    axios.get("http://localhost:5000/orders/all", { withCredentials: true })
+    axios.get("https://garments-tracker-server-1.onrender.com/orders/all", { withCredentials: true })
       .then(res => setOrders(res.data))
       .catch(err => console.error(err));
   }, []);

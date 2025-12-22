@@ -10,7 +10,7 @@ const Login = ({ setUser }) => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        'http://localhost:5000/login',
+        'https://garments-tracker-server-1.onrender.com/login',
         { email: data.email, password: data.password },
         { withCredentials: true }
       );

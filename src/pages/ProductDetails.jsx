@@ -11,7 +11,7 @@ const ProductDetails = ({ user }) => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/product/${id}`)
+      .get(`https://garments-tracker-server-1.onrender.com/product/${id}`)
       .then((res) => {
         setProduct(res.data);
         setLoading(false);

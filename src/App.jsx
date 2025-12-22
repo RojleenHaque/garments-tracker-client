@@ -64,7 +64,7 @@ function App() {
           </Route>
 
           {/* 404 Page */}
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer />

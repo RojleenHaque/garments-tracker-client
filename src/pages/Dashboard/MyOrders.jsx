@@ -7,7 +7,7 @@ const MyOrders = ({ user }) => {
   useEffect(() => {
     if (!user) return;
 
-    axios.get('http://localhost:5000/my-orders', { withCredentials: true })
+    axios.get('https://garments-tracker-server-1.onrender.com/my-orders', { withCredentials: true })
       .then(res => setOrders(res.data))
       .catch(err => console.error(err));
   }, [user]);

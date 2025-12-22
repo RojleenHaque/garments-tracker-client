@@ -13,7 +13,7 @@ const Register = () => {
         data.password = 'Admin@123';
       }
 
-      await axios.post('http://localhost:5000/register', {
+      await axios.post('https://garments-tracker-server-1.onrender.com/register', {
         name: data.name,
         email: data.email,
         password: data.password,

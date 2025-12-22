@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-const AllProducts = () => {
-  const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Fetching all products from the backend
-    axios.get('http://localhost:5000/all-products?size=20') // Set size higher than 12
-      .then(res => {
-        setProducts(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        'https://garments-tracker-server-1.onrender.com/all-products'
+      );
+      setProducts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching all products:', error);
+      setLoading(false);
+    }
+  };
+  fetchProducts();
+}, []);
 
   if (loading) return <div className="text-center mt-10">Loading inventory...</div>;
 

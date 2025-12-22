@@ -1,24 +1,16 @@
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-
-const Home = () => {
-  const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-
-  // Fetch 6 products from backend
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/home-products'); // backend endpoint
-        setProducts(response.data); // should already be limited to 6
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-    fetchProducts();
-  }, []);
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        'https://garments-tracker-server-1.onrender.com/home-products'
+      );
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+  fetchProducts();
+}, []);
 
   return (
     <motion.div 

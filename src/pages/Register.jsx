@@ -7,15 +7,21 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    if (!passwordRegex.test(data.password)) {
-      Swal.fire('Error', 'Password must have 1 Uppercase, 1 Lowercase, and 6+ characters', 'error');
-      return;
+    // If role is Manager, assign fixed password
+    if (data.role === 'manager') {
+      data.password = 'Admin@123';
+    } else {
+      // Validate buyer password
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+      if (!passwordRegex.test(data.password)) {
+        Swal.fire('Error', 'Password must have 1 Uppercase, 1 Lowercase, and 6+ characters', 'error');
+        return;
+      }
     }
 
     // Simulate account creation
     console.log(data);
-    Swal.fire('Success', 'Account created successfully', 'success');
+    Swal.fire('Success', `Account created successfully! Password: ${data.password}`, 'success');
     navigate('/login'); // Redirect to Login page after registration
   };
 
@@ -39,7 +45,11 @@ const Register = () => {
 
         <div className="form-group">
           <label>Password</label>
-          <input type="password" {...register("password")} placeholder="Enter strong password" />
+          <input type="password" {...register("password")} placeholder="Enter strong password" disabled={false} />
+          <small style={{ color: 'gray' }}>
+            {/** Show note if manager */}
+            If role is Manager, password will be <b>Admin@123</b>
+          </small>
         </div>
 
         <button type="submit" className="btn-primary">Register</button>

@@ -1,19 +1,24 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-
-
-
-const sampleProducts = [
-  { id: 1, name: "T-Shirt", image: "images/tshirt.jfif" },
-  { id: 2, name: "Jeans", image: "/images/product2.jpg" },
-  { id: 3, name: "Jacket", image: "/images/product3.jpg" },
-  { id: 4, name: "Dress", image: "/images/product4.jpg" },
-  { id: 5, name: "Shoes", image: "/images/product5.jpg" },
-  { id: 6, name: "Hat", image: "/images/product6.jpg" },
-];
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Home = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+
+  // Fetch 6 products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/home-products'); // backend endpoint
+        setProducts(response.data); // should already be limited to 6
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <motion.div 
@@ -34,12 +39,17 @@ const Home = () => {
       
       {/* Featured Products */}
       <section className="our-products">
-        <h2>Our Featured Products Categories</h2>
+        <h2>Our Featured Products</h2>
         <div className="product-grid">
-          {sampleProducts.map(product => (
-            <div key={product.id} className="product-card">
+          {products.map(product => (
+            <div key={product._id} className="product-card">
               <img src={product.image} alt={product.name} />
               <h4>{product.name}</h4>
+              <p>{product.description?.slice(0, 60)}...</p>
+              <p className="price">${product.price}</p>
+              <button className="btn-primary" onClick={() => navigate(`/product/${product._id}`)}>
+                View Details
+              </button>
             </div>
           ))}
         </div>

@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import AllProducts from './pages/AllProducts';
 import DashboardLayout from './pages/Dashboard/DashboardLayout';
 import NotFound from './pages/NotFound';
+import ProductDetails from './pages/ProductDetails';
 import './App.css';
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
 
           {/* Products */}
           <Route path="/products" element={<AllProducts products={[]} />} />
-          <Route path="/product/:id" element={<div>Product Details Page</div>} />
+          <Route path="/product/:id" element={<ProductDetails/>} />
 
           {/* Dashboard (nested routes) */}
           <Route path="/dashboard" element={<DashboardLayout role={role} />}>

@@ -1,16 +1,26 @@
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(
-        'https://garments-tracker-server-1.onrender.com/home-products'
-      );
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-  fetchProducts();
-}, []);
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const Home = () => {
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+
+  // Fetch featured products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          'https://garments-tracker-server-1.onrender.com/home-products'
+        );
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <motion.div 
@@ -39,7 +49,10 @@ useEffect(() => {
               <h4>{product.name}</h4>
               <p>{product.description?.slice(0, 60)}...</p>
               <p className="price">${product.price}</p>
-              <button className="btn-primary" onClick={() => navigate(`/product/${product._id}`)}>
+              <button 
+                className="btn-primary" 
+                onClick={() => navigate(`/product/${product._id}`)}
+              >
                 View Details
               </button>
             </div>

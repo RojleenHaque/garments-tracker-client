@@ -37,11 +37,13 @@ const Booking = ({ user }) => {
 
   const onSubmit = async data => {
     try {
-      const res = await api.post("/book-product", {
+      const { data: response } = await api.post("/book-product", {
         ...data,
         quantity: Number(data.quantity),
         productId: id,
       });
+
+      console.log(response); // optional: for debugging
 
       Swal.fire("Success", "Booking placed successfully", "success");
       navigate("/my-orders");
@@ -68,41 +70,53 @@ const Booking = ({ user }) => {
         </div>
         <div>
           <label>Product</label>
-          <input {...register('productName')} readOnly className="input-field" />
+          <input {...register("productName")} readOnly className="input-field" />
         </div>
         <div>
           <label>Price per Unit</label>
-          <input {...register('price')} readOnly className="input-field" />
+          <input {...register("price")} readOnly className="input-field" />
         </div>
         <div>
           <label>Quantity</label>
-          <input type="number" {...register('quantity', { required: true, min: product.minQuantity || 1, max: product.availableQuantity })} className="input-field"/>
-          {errors.quantity && <p className="text-red-600">Quantity must be between {product.minQuantity || 1} and {product.availableQuantity}</p>}
+          <input
+            type="number"
+            {...register("quantity", {
+              required: true,
+              min: product.minQuantity || 1,
+              max: product.availableQuantity,
+            })}
+            className="input-field"
+          />
+          {errors.quantity && (
+            <p className="text-red-600">
+              Quantity must be between {product.minQuantity || 1} and {product.availableQuantity}
+            </p>
+          )}
         </div>
         <div>
           <label>Order Price</label>
-          <input value={(quantity * product.price).toFixed(2)} readOnly className="input-field"/>
+          <input value={(quantity * product.price).toFixed(2)} readOnly className="input-field" />
         </div>
         <div>
           <label>Payment Method</label>
-          <select {...register('paymentMethod')} className="input-field">
+          <select {...register("paymentMethod")} className="input-field">
             <option value="COD">Cash on Delivery</option>
             <option value="Online">Online Payment</option>
           </select>
         </div>
         <div>
           <label>Contact Number</label>
-          <input {...register('contactNumber', { required: true })} className="input-field"/>
+          <input {...register("contactNumber", { required: true })} className="input-field" />
           {errors.contactNumber && <p className="text-red-600">Contact number required</p>}
         </div>
         <div>
           <label>Delivery Address</label>
-          <textarea {...register('deliveryAddress', { required: true })} className="input-field"></textarea>
+          <textarea {...register("deliveryAddress", { required: true })} className="input-field"></textarea>
           {errors.deliveryAddress && <p className="text-red-600">Delivery address required</p>}
         </div>
         <div>
           <label>Additional Notes</label>
-          <textarea {...register('additionalNotes')} className="input-field"></textarea>
+          <textarea {...register("additionalNotes")} className="input-field"></textarea>
         </div>
         <button type="submit" className="btn-primary w-full mt-4">Place Booking</button>
       </form>
@@ -111,4 +125,3 @@ const Booking = ({ user }) => {
 };
 
 export default Booking;
-

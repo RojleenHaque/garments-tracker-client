@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
@@ -8,42 +8,55 @@ const Booking = ({ user }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
-    if (!user) return navigate('/login', { state: { from: `/booking/${id}` } });
+    if (!user) {
+      navigate("/login", { state: { from: `/booking/${id}` } });
+      return;
+    }
 
-    axios.get(`http://localhost:5000/product/${id}`)
+    api
+      .get(`/product/${id}`)
       .then(res => {
         setProduct(res.data);
-        setValue('productName', res.data.name);
-        setValue('price', res.data.price);
+        setValue("productName", res.data.name);
+        setValue("price", res.data.price);
       })
       .catch(err => console.error(err));
   }, [id, user, navigate, setValue]);
 
-  const quantity = watch('quantity') || 1;
+  const quantity = watch("quantity") || 1;
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     try {
-      const res = await axios.post(
-        'https://garments-tracker-server-1.onrender.com/book-product',
-        { ...data, quantity: Number(data.quantity), productId: id },
-        { withCredentials: true }
-      );
+      const res = await api.post("/book-product", {
+        ...data,
+        quantity: Number(data.quantity),
+        productId: id,
+      });
 
-      if (res.data.paymentUrl) {
-        window.location.href = res.data.paymentUrl;
-      } else {
-        Swal.fire('Success', 'Booking placed successfully', 'success');
-        navigate('/my-orders');
-      }
+      Swal.fire("Success", "Booking placed successfully", "success");
+      navigate("/my-orders");
     } catch (err) {
-      Swal.fire('Error', err.response?.data?.message || 'Booking failed', 'error');
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Booking failed",
+        "error"
+      );
     }
   };
 
-  if (!product) return <div className="text-center mt-20">Loading...</div>;
+  if (!product) {
+    return <div className="text-center mt-20">Loading...</div>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white rounded shadow mt-10">

@@ -1,42 +1,46 @@
-import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const Login = ({ setUser }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     try {
-      const res = await axios.post(
-        'https://garments-tracker-server-1.onrender.com/login',
-        { email: data.email, password: data.password },
-        { withCredentials: true }
-      );
+      const res = await api.post("/login", {
+        email: data.email,
+        password: data.password,
+      });
 
       const loggedInUser = res.data.user;
-      setUser(loggedInUser); // store user in context or state
+      setUser(loggedInUser);
 
-      Swal.fire('Success', 'Logged in successfully', 'success');
+      Swal.fire("Success", "Logged in successfully", "success");
 
-      // Redirect based on role
       switch (loggedInUser.role) {
-        case 'admin':
-          navigate('/dashboard/manage-users', { replace: true });
+        case "admin":
+          navigate("/dashboard/manage-users", { replace: true });
           break;
-        case 'manager':
-          navigate('/dashboard/add-product', { replace: true });
+        case "manager":
+          navigate("/dashboard/add-product", { replace: true });
           break;
         default:
-          navigate('/dashboard/my-orders', { replace: true });
+          navigate("/dashboard/my-orders", { replace: true });
       }
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.message || 'Login failed';
-      Swal.fire('Error', msg, 'error');
+      const msg = err.response?.data?.message || "Login failed";
+      Swal.fire("Error", msg, "error");
     }
   };
+
 
   return (
     <div className="auth-container">

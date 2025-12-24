@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 const ProductDetails = ({ user }) => {
   const { id } = useParams();
@@ -10,13 +10,13 @@ const ProductDetails = ({ user }) => {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`https://garments-tracker-server-1.onrender.com/product/${id}`)
-      .then((res) => {
+    api
+      .get(`/product/${id}`)
+      .then(res => {
         setProduct(res.data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         setLoading(false);
       });
@@ -25,7 +25,11 @@ const ProductDetails = ({ user }) => {
   if (loading) return <div className="text-center mt-20">Loading Product...</div>;
   if (!product) return <div className="text-center mt-20">Product not found!</div>;
 
-  const canOrder = user && user.role !== "admin" && user.role !== "manager" && user.status !== "suspended";
+  const canOrder =
+    user &&
+    user.role !== "admin" &&
+    user.role !== "manager" &&
+    user.status !== "suspended";
 
   return (
     <div className="max-w-4xl mx-auto p-8">

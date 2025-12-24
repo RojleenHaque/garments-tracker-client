@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 
 const MyOrders = ({ user }) => {
   const [orders, setOrders] = useState([]);
@@ -7,7 +7,8 @@ const MyOrders = ({ user }) => {
   useEffect(() => {
     if (!user) return;
 
-    axios.get('https://garments-tracker-server-1.onrender.com/my-orders', { withCredentials: true })
+    api
+      .get("/my-orders")
       .then(res => setOrders(res.data))
       .catch(err => console.error(err));
   }, [user]);

@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const Home = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
-  // Fetch featured products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          'https://garments-tracker-server-1.onrender.com/home-products'
-        );
+        const response = await api.get("/home-products");
         setProducts(response.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
       }
     };
+
     fetchProducts();
   }, []);
+
 
   return (
     <motion.div 

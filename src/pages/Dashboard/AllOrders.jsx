@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-
+import api from "../../api/axios"; // adjust path if needed
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
-  const [filter, setFilter] = useState(""); // Pending / Approved / Rejected
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios.get("https://garments-tracker-server-1.onrender.com/orders/all", { withCredentials: true })
+    api.get("/orders/all")
       .then(res => setOrders(res.data))
       .catch(err => console.error(err));
   }, []);

@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
 const sampleOrders = [
-  { id: 1, user: "John Doe", product: "Shirt", quantity: 10, date: "2025-12-23" }
+  { id: 1, user: "Rojleen Haque", product: "Shirt", quantity: 10, date: "2025-12-23" }
 ];
 
 const PendingOrders = () => {

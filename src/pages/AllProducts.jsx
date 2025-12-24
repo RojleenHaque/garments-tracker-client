@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 
 const AllProducts = () => {
   const navigate = useNavigate();
@@ -10,9 +10,7 @@ const AllProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          'https://garments-tracker-server-1.onrender.com/all-products'
-        );
+        const response = await api.get('/all-products');
         setProducts(response.data);
         setLoading(false);
       } catch (error) {

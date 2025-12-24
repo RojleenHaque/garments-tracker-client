@@ -1,32 +1,34 @@
-import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const Register = () => {
-  const { register, handleSubmit } = useForm(); // removed 'errors' since it was unused
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     try {
-      if (data.role === 'manager') {
-        data.password = 'Admin@123';
-      }
-
-      await axios.post('https://garments-tracker-server-1.onrender.com/register', {
+      const payload = {
         name: data.name,
         email: data.email,
-        password: data.password,
+        password: data.role === "manager" ? "Admin@123" : data.password,
         role: data.role,
-      });
+      };
 
-      Swal.fire('Success', 'Account created successfully', 'success');
-      navigate('/login');
+      await api.post("/register", payload);
 
+      Swal.fire("Success", "Account created successfully", "success");
+      navigate("/login");
     } catch (err) {
-      Swal.fire('Error', err.response?.data?.message || 'Registration failed', 'error');
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Registration failed",
+        "error"
+      );
     }
   };
+
 
   return (
     <div className="auth-container">

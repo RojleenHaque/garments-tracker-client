@@ -1,10 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://garments-tracker-server-cgog.vercel.app',
-  withCredentials: true, // if you use cookies for auth
+  baseURL: "https://garments-tracker-server-hl9x.vercel.app",
+  withCredentials: true,
 });
 
 export default api;
-
-

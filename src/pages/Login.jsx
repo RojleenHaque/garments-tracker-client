@@ -1,75 +1,131 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
 
-const Login = ({ setUser }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+const Login = () => {
+  const { signIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const onSubmit = async data => {
+  const from = location.state?.from || "/dashboard";
+
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = async (data) => {
     try {
-      const res = await api.post("/login", {
-        email: data.email,
-        password: data.password,
+      const email = data.email.trim();
+      const password = data.password;
+
+      let userData = null;
+
+      // ======================
+      // ADMIN LOGIN
+      // ======================
+      if (
+        email === "admin@gmail.com" &&
+        password === "Admin@12345"
+      ) {
+        userData = {
+          name: "Admin",
+          email,
+          role: "admin",
+          status: "active",
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        Swal.fire("Success", "Admin Login Successful", "success");
+
+        navigate(from || "/dashboard/manage-users", {
+          replace: true,
+        });
+
+        return;
+      }
+
+      // ======================
+      // MANAGER LOGIN
+      // ======================
+      if (
+        email === "manager@gmail.com" &&
+        password === "Manager@12345"
+      ) {
+        userData = {
+          name: "Manager",
+          email,
+          role: "manager",
+          status: "active",
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        Swal.fire("Success", "Manager Login Successful", "success");
+
+        navigate(from || "/dashboard/add-product", {
+          replace: true,
+        });
+
+        return;
+      }
+
+      // ======================
+      // BUYER LOGIN
+      // ======================
+      const userCredential = await signIn(email, password);
+
+      const user = userCredential.user;
+
+      userData = {
+        name: user.displayName || "Buyer",
+        email: user.email,
+        role: "buyer",
+        status: "active",
+      };
+
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      Swal.fire("Success", "Login Successful", "success");
+
+      navigate(from || "/dashboard/my-orders", {
+        replace: true,
       });
 
-      const loggedInUser = res.data.user;
-      setUser(loggedInUser);
-
-      Swal.fire("Success", "Logged in successfully", "success");
-
-      switch (loggedInUser.role) {
-        case "admin":
-          navigate("/dashboard/manage-users", { replace: true });
-          break;
-        case "manager":
-          navigate("/dashboard/add-product", { replace: true });
-          break;
-        default:
-          navigate("/dashboard/my-orders", { replace: true });
-      }
     } catch (err) {
-      console.error(err);
-      const msg = err.response?.data?.message || "Login failed";
-      Swal.fire("Error", msg, "error");
+      console.log(err);
+
+      Swal.fire(
+        "Error",
+        "Wrong email or password",
+        "error"
+      );
     }
   };
-
 
   return (
     <div className="auth-container">
       <h2>Login</h2>
+
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            {...register('email', { required: true })}
-            placeholder="example@mail.com"
-          />
-          {errors.email && <span className="error">Email is required</span>}
-        </div>
+        <input
+          {...register("email", { required: true })}
+          placeholder="Email"
+        />
 
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            {...register('password', { required: true })}
-            placeholder="Enter password"
-          />
-          {errors.password && <span className="error">Password is required</span>}
-        </div>
+        <input
+          type="password"
+          {...register("password", { required: true })}
+          placeholder="Password"
+        />
 
-        <button type="submit" className="btn-primary">Login</button>
+        <button type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
 };
 
 export default Login;
-

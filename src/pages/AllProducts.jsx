@@ -1,50 +1,88 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const AllProducts = () => {
   const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get('/all-products');
-        setProducts(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching all products:', error);
-        setLoading(false);
-      }
-    };
-    fetchProducts();
+    api.get("/all-products")
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setProducts(res.data);
+        } else {
+          setProducts([]);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        setProducts([]);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="text-center mt-10">Loading inventory...</div>;
+  if (loading) {
+    return (
+      <div className="text-center" style={{ marginTop: "50px" }}>
+        Loading products...
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
-      <h2 style={{ textAlign: 'center', margin: '2rem 0' }}>Factory Inventory</h2>
-      <div className="product-grid">
-        {products.map(product => (
-          <div key={product._id} className="product-card">
-            <img src={product.image} alt={product.name} />
-            <div className="card-body">
-              <h4>{product.name}</h4>
-              <p>Category: {product.category}</p>
-              <p>Price: ${product.price}</p>
-              <p>Available: {product.availableQuantity}</p>
-              <button 
-                onClick={() => navigate(`/product/${product._id}`)} 
-                className="btn-primary"
-              >
-                View Details
-              </button>
+
+      <h2 className="text-center" style={{ margin: "30px 0" }}>
+        All Products
+      </h2>
+
+      {products.length === 0 ? (
+        <p className="text-center">
+          No products available
+        </p>
+      ) : (
+        <div className="products-grid">
+
+          {products.map(p => (
+            <div key={p._id} className="product-card-grid">
+
+              <img src={p.image} alt={p.name} />
+
+              <div className="product-info">
+
+                <h3>{p.name}</h3>
+
+                <p className="category">
+                  {p.category}
+                </p>
+
+                <p className="price">
+                  ${p.price}
+                </p>
+
+                <p>
+                  Available: {p.availableQuantity}
+                </p>
+
+                <button
+                  className="btn-order"
+                  onClick={() =>
+                    navigate(`/product/${p._id}`)
+                  }
+                >
+                  View Details
+                </button>
+
+              </div>
+
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+
+        </div>
+      )}
     </div>
   );
 };

@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import api from "../api/axios";
 
-const Booking = ({ user }) => {
+const Booking = () => {
+
   const { id } = useParams();
+
   const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const {
     register,
@@ -17,108 +22,208 @@ const Booking = ({ user }) => {
     formState: { errors },
   } = useForm();
 
+  // login protection
   useEffect(() => {
     if (!user) {
-      navigate("/login", { state: { from: `/booking/${id}` } });
-      return;
+      navigate("/login", {
+        state: { from: `/booking/${id}` },
+      });
     }
+  }, [id, navigate, user]);
 
-    api
-      .get(`/product/${id}`)
-      .then(res => {
+  // load product
+  useEffect(() => {
+
+    api.get(`/product/${id}`)
+      .then((res) => {
+
         setProduct(res.data);
+
+        setValue("email", user?.email);
         setValue("productName", res.data.name);
         setValue("price", res.data.price);
-      })
-      .catch(err => console.error(err));
-  }, [id, user, navigate, setValue]);
+
+      });
+
+  }, [id, setValue, user]);
 
   const quantity = watch("quantity") || 1;
 
-  const onSubmit = async data => {
+  const totalPrice =
+    quantity * (product?.price || 0);
+
+  const onSubmit = async (data) => {
+
+    if (quantity < product.minQuantity) {
+      return Swal.fire(
+        "Error",
+        `Minimum order quantity is ${product.minQuantity}`,
+        "error"
+      );
+    }
+
+    if (quantity > product.availableQuantity) {
+      return Swal.fire(
+        "Error",
+        "Quantity exceeds stock",
+        "error"
+      );
+    }
+
     try {
-      const { data: response } = await api.post("/book-product", {
+
+      await api.post("/book-product", {
         ...data,
-        quantity: Number(data.quantity),
         productId: id,
+        quantity: Number(quantity),
+        totalPrice,
+        userEmail: user.email,
       });
 
-      console.log(response); // optional: for debugging
+      Swal.fire(
+        "Success",
+        "Booking placed successfully",
+        "success"
+      );
 
-      Swal.fire("Success", "Booking placed successfully", "success");
-      navigate("/my-orders");
+      navigate("/dashboard/my-orders");
+
     } catch (err) {
+
       Swal.fire(
         "Error",
-        err.response?.data?.message || "Booking failed",
+        "Booking failed",
         "error"
       );
     }
   };
 
   if (!product) {
-    return <div className="text-center mt-20">Loading...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-white rounded shadow mt-10">
-      <h2 className="text-2xl font-bold mb-4">Book Product</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
+    <div className="form-container">
+
+      <h2 className="form-title">
+        Product Booking
+      </h2>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+
+        <div className="form-group">
           <label>Email</label>
-          <input value={user.email} readOnly className="input-field" />
+
+          <input
+            {...register("email")}
+            readOnly
+            className="form-input"
+          />
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Product</label>
-          <input {...register("productName")} readOnly className="input-field" />
+
+          <input
+            {...register("productName")}
+            readOnly
+            className="form-input"
+          />
         </div>
-        <div>
-          <label>Price per Unit</label>
-          <input {...register("price")} readOnly className="input-field" />
+
+        <div className="form-group">
+          <label>Price Per Unit</label>
+
+          <input
+            {...register("price")}
+            readOnly
+            className="form-input"
+          />
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Quantity</label>
+
           <input
             type="number"
             {...register("quantity", {
               required: true,
-              min: product.minQuantity || 1,
-              max: product.availableQuantity,
             })}
-            className="input-field"
+            className="form-input"
           />
+
           {errors.quantity && (
-            <p className="text-red-600">
-              Quantity must be between {product.minQuantity || 1} and {product.availableQuantity}
+            <p className="error">
+              Quantity required
             </p>
           )}
         </div>
-        <div>
-          <label>Order Price</label>
-          <input value={(quantity * product.price).toFixed(2)} readOnly className="input-field" />
+
+        <div className="form-group">
+          <label>Total Price</label>
+
+          <input
+            value={totalPrice}
+            readOnly
+            className="form-input"
+          />
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Payment Method</label>
-          <select {...register("paymentMethod")} className="input-field">
-            <option value="COD">Cash on Delivery</option>
-            <option value="Online">Online Payment</option>
+
+          <select
+            {...register("paymentMethod")}
+            className="form-input"
+          >
+            <option value="COD">
+              Cash On Delivery
+            </option>
+
+            <option value="Online">
+              Online Payment
+            </option>
           </select>
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Contact Number</label>
-          <input {...register("contactNumber", { required: true })} className="input-field" />
-          {errors.contactNumber && <p className="text-red-600">Contact number required</p>}
+
+          <input
+            {...register("contactNumber", {
+              required: true,
+            })}
+            className="form-input"
+          />
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Delivery Address</label>
-          <textarea {...register("deliveryAddress", { required: true })} className="input-field"></textarea>
-          {errors.deliveryAddress && <p className="text-red-600">Delivery address required</p>}
+
+          <textarea
+            {...register("deliveryAddress", {
+              required: true,
+            })}
+            className="form-input"
+          />
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Additional Notes</label>
-          <textarea {...register("additionalNotes")} className="input-field"></textarea>
+
+          <textarea
+            {...register("additionalNotes")}
+            className="form-input"
+          />
         </div>
-        <button type="submit" className="btn-primary w-full mt-4">Place Booking</button>
+
+        <button
+          type="submit"
+          className="btn-primary"
+        >
+          Place Booking
+        </button>
+
       </form>
     </div>
   );

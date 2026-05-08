@@ -1,40 +1,110 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../api/axios";
 import Swal from "sweetalert2";
-const steps = ["Cutting Completed", "Sewing Started", "Finishing", "QC Checked", "Packed", "Shipped / Out for Delivery"];
 
 const ApprovedOrders = () => {
-  const [orders] = useState([{ id: 1, product: "Shirt", approvedDate: "2025-12-23", tracking: [] }]);
 
-  const handleAddTracking = order => {
+  const [orders, setOrders] = useState([]);
+
+  // load only approved orders
+  useEffect(() => {
+
+    api.get("/orders")
+      .then((res) => {
+
+        const approvedOrders = res.data.filter(
+          order => order.status === "Approved"
+        );
+
+        setOrders(approvedOrders);
+
+      })
+      .catch((err) => console.log(err));
+
+  }, []);
+
+  // tracking placeholder
+  const handleTracking = (order) => {
+
     Swal.fire({
-      title: `Add Tracking for Order #${order.id}`,
-      html: `
-        <input id="location" class="swal2-input" placeholder="Location">
-        <input id="note" class="swal2-input" placeholder="Note">
-        <select id="status" class="swal2-select">${steps.map(s => `<option>${s}</option>`).join('')}</select>
-      `,
-      confirmButtonText: "Add"
-    }).then(res => {
-      if (res.isConfirmed) Swal.fire("Added!", "Tracking info added.", "success");
+      title: "Add Tracking",
+      text: `Tracking added for ${order.productName}`,
+      icon: "success",
     });
+
   };
 
   return (
     <div className="table-container">
-      <h2 className="table-title">Approved Orders</h2>
+
+      <h2 className="table-title">
+        Approved Orders
+      </h2>
+
       <table className="table">
+
         <thead>
           <tr>
-            <th>Order ID</th><th>Product</th><th>Approved Date</th><th>Actions</th>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Approved Date</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
-          {orders.map(o => (
-            <tr key={o.id}>
-              <td>#{o.id}</td><td>{o.product}</td><td>{o.approvedDate}</td>
-              <td><button className="btn-primary" onClick={() => handleAddTracking(o)}>Add Tracking</button></td>
+
+          {orders.length > 0 ? (
+            orders.map(order => (
+
+              <tr key={order._id}>
+
+                <td>{order._id.slice(0, 6)}</td>
+
+                <td>{order.userEmail}</td>
+
+                <td>{order.productName}</td>
+
+                <td>{order.quantity}</td>
+
+                <td>
+                  {order.approvedAt
+                    ? new Date(order.approvedAt)
+                        .toLocaleDateString()
+                    : "N/A"}
+                </td>
+
+                <td>
+                  <span className="status-approved">
+                    Approved
+                  </span>
+                </td>
+
+                <td>
+
+                  <button
+                    className="btn-primary"
+                    onClick={() => handleTracking(order)}
+                  >
+                    Add Tracking
+                  </button>
+
+                </td>
+
+              </tr>
+
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">
+                No approved orders found
+              </td>
             </tr>
-          ))}
+          )}
+
         </tbody>
       </table>
     </div>

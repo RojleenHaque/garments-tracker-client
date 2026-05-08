@@ -2,58 +2,62 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-
 const Home = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get("/home-products");
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchProducts();
+    api.get("/home-products")
+      .then(res => setProducts(res.data))
+      .catch(err => console.log(err));
   }, []);
 
-
   return (
-    <motion.div 
+    <motion.div
       className="home-container"
-      initial={{ opacity: 0 }} 
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      {/* Hero Section */}
+      {/* HERO */}
       <section className="hero">
         <div className="hero-content">
           <h1>Efficient Garment Production Tracking</h1>
-          <p>Streamline your workflow and monitor garment production in real-time.</p>
-          <button className="cta-btn" onClick={() => navigate('/products')}>
-            View Products
+          <p>Manage orders, production & delivery in one system</p>
+
+          <button
+            className="cta-btn"
+            onClick={() => navigate("/products")}
+          >
+            View All Products
           </button>
         </div>
       </section>
-      
-      {/* Featured Products */}
-      <section className="our-products">
-        <h2>Our Featured Products</h2>
-        <div className="product-grid">
+
+      {/* FEATURED */}
+      <section className="featured-section">
+        <h2 className="section-title">Featured Products</h2>
+
+        <div className="featured-grid">
           {products.map(product => (
-            <div key={product._id} className="product-card">
+            <div key={product._id} className="featured-card">
+
               <img src={product.image} alt={product.name} />
-              <h4>{product.name}</h4>
-              <p>{product.description?.slice(0, 60)}...</p>
-              <p className="price">${product.price}</p>
-              <button 
-                className="btn-primary" 
-                onClick={() => navigate(`/product/${product._id}`)}
-              >
-                View Details
-              </button>
+
+              <div className="featured-info">
+                <h3>{product.name}</h3>
+
+                <p className="category">{product.category}</p>
+
+                <p className="price">${product.price}</p>
+
+                <button
+                  className="btn-primary"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                >
+                  View Details
+                </button>
+              </div>
+
             </div>
           ))}
         </div>

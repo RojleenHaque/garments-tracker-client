@@ -3,16 +3,23 @@ import { useEffect, useState } from "react";
 
 const DashboardLayout = () => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = JSON.parse(
-      localStorage.getItem("user")
-    );
-
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
+    setLoading(false);
   }, []);
 
   const role = user?.role;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>Please login to access dashboard</div>;
+  }
 
   return (
     <div className="dashboard-main">
@@ -26,91 +33,35 @@ const DashboardLayout = () => {
 
         <nav className="sidebar-nav">
 
-          {/* ================= ADMIN ================= */}
+          {/* ADMIN */}
           {role === "admin" && (
             <>
-              <Link
-                className="sidebar-link"
-                to="/dashboard/manage-users"
-              >
-                Manage Users
-              </Link>
-
-              <Link
-                className="sidebar-link"
-                to="/dashboard/all-products"
-              >
-                All Products
-              </Link>
-
-              <Link
-                className="sidebar-link"
-                to="/dashboard/all-orders"
-              >
-                All Orders
-              </Link>
+              <Link to="/dashboard/manage-users">Manage Users</Link>
+              <Link to="/dashboard/all-products">All Products</Link>
+              <Link to="/dashboard/all-orders">All Orders</Link>
             </>
           )}
 
-          {/* ================= MANAGER ================= */}
+          {/* MANAGER */}
           {role === "manager" && (
             <>
-              <Link
-                className="sidebar-link"
-                to="/dashboard/add-product"
-              >
-                Add Product
-              </Link>
-
-              <Link
-                className="sidebar-link"
-                to="/dashboard/manage-products"
-              >
-                Manage Products
-              </Link>
-
-              <Link
-                className="sidebar-link"
-                to="/dashboard/pending-orders"
-              >
-                Pending Orders
-              </Link>
-
-              <Link
-                className="sidebar-link"
-                to="/dashboard/approved-orders"
-              >
-                Approved Orders
-              </Link>
+              <Link to="/dashboard/add-product">Add Product</Link>
+              <Link to="/dashboard/manage-products">Manage Products</Link>
+              <Link to="/dashboard/pending-orders">Pending Orders</Link>
+              <Link to="/dashboard/approved-orders">Approved Orders</Link>
             </>
           )}
 
-          {/* ================= BUYER ================= */}
+          {/* BUYER */}
           {role === "buyer" && (
             <>
-              <Link
-                className="sidebar-link"
-                to="/dashboard/my-orders"
-              >
-                My Orders
-              </Link>
-
-              <Link
-                className="sidebar-link"
-                to="/dashboard/track-order"
-              >
-                Track Order
-              </Link>
+              <Link to="/dashboard/my-orders">My Orders</Link>
+              <Link to="/dashboard/track-order">Track Order</Link>
             </>
           )}
 
-          {/* ================= COMMON ================= */}
-          <Link
-            className="sidebar-link"
-            to="/dashboard/profile"
-          >
-            My Profile
-          </Link>
+          {/* COMMON */}
+          <Link to="/dashboard/profile">My Profile</Link>
 
         </nav>
       </aside>
